@@ -45,6 +45,7 @@ cache_config = {
 app.config.from_mapping(cache_config)
 cache = Cache(app)
 
+
 # 前端上传页面模板
 HTML_TEMPLATE = """ 
 <!DOCTYPE html> 
