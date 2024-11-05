@@ -91,11 +91,14 @@ HTML_TEMPLATE = """
                 <input class="form-control" type="file" id="file" name="file" required> 
                 <div class="form-text">最大允许上传5MB的文件。</div> 
             </div> 
-            <button type="submit" class="btn btn-primary w-100">上传</button> 
+            <button type="submit" class="btn btn-primary w-100" id="upload-button">上传</button> 
         </form> 
+        <div id="loading-message" class="mt-3" style="display: none;">
+            <div class="alert alert-info" role="alert">正在上传中，请稍候...</div>
+        </div>
         <div id="response-message" class="mt-3"></div>
         <div id="file-link" class="mt-2"></div>
-    </div> 
+   </div> 
 
     <script> 
         document.getElementById('upload-form').addEventListener('submit', async function(event) { 
@@ -109,6 +112,11 @@ HTML_TEMPLATE = """
             const fileLinkDiv = document.getElementById('file-link'); 
             messageDiv.innerHTML = ''; 
             fileLinkDiv.innerHTML = ''; 
+            const uploadButton = document.getElementById('upload-button');
+            uploadButton.disabled = true;
+            
+            const loadingMessageDiv = document.getElementById('loading-message');
+            loadingMessageDiv.style.display = 'block';
 
             try { 
                 const response = await fetch('/upload', { 
@@ -139,7 +147,10 @@ HTML_TEMPLATE = """
             } catch (error) { 
                 console.error('Error:', error); 
                 messageDiv.innerHTML = `<div class="alert alert-danger" role="alert">上传过程中发生错误，请稍后再试。</div>`; 
-            } 
+            } finally {
+                uploadButton.disabled = false;
+          	    loadingMessage.style.display='none';
+          	}
         }); 
     </script> 
 </body> 
