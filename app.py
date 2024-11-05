@@ -26,7 +26,7 @@ GITHUB_TOKEN = os.getenv('GITHUB_TOKEN', 'default_token')  # 替换为您的 Git
 RELAY_URL = os.getenv('RELAY_URL', 'https://default_relay_url.com')  # 替换为您的中转程序 URL
 SECRET_TOKEN = os.getenv('SECRET_TOKEN', 'default_secret_token') # 定义一个随机密钥仅用于手动清理
 FILE_RETENTION_DAYS = int(os.getenv('FILE_RETENTION_DAYS', 1))  # 定义文件的过期时间用于自动清理
-RELAY_MODEL = os.getenv('RELAY_MODEL', 'fileupload') # 自定义模型名
+RELAY_MODEL = os.getenv('RELAY_MODEL', 'fileupload') # 自定义模型名,用于使用中转key鉴权
 
 # GitHub API 基础 URL
 GITHUB_API_URL = 'https://api.github.com'
@@ -420,7 +420,7 @@ def upload_file():
     file_length = file.tell() 
     file.seek(0)  # 重置文件指针 
     if file_length > MAX_FILE_SIZE: 
-        message = "上传的文件过大，最大允许5MB。" 
+        message = f"上传的文件过大，最大允许{MAX_FILE_SIZE/1048576}MB。" 
         if request.headers.get('Accept') == 'application/json':
             return jsonify({"success": False, "message": message}), 413
         else:
